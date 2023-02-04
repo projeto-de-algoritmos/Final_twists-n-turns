@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Mazes animation</title>
+  <meta charset=utf-8>
+  <link rel=stylesheet href=styles.css />
+  <script src=./src/index.js type=module defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Mazes</h1>
+    <select name=algo id=algo-select>
+      <option default>---</option>
+    </select>
+    <button id=clear>Limpar</button>
+    <button id=find-path>Encontrar Caminho</button>
+    <button id=other-path>Outro Caminho</button>
+  </header>
+  <main>
+    <canvas id=main-canvas></canvas>
+    <section>
+      <h2>Algoritmo</h2>
+      <div id=info>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>
+      Como referência para a implementação, o excelente livro
+      <a href="http://www.mazesforprogrammers.com" target="_blank">Mazes for Programmers</a>
+      foi utilizado.
+    </p>
+  </footer>
+</body>
+
+</html>
