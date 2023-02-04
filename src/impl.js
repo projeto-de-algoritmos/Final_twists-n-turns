@@ -168,3 +168,65 @@ class RecursiveBacktracker {
     return grid;
   }
 }
+
+class Kruskals {
+  // a helper method that returns functions to operate on the
+  // current state of the algorithm.
+  static state(grid, states) {
+    let n = 0;
+    const neighbors = [];
+    const setForCell = new CellMap();
+    const cellsInSet = new Map();
+
+    grid.cells.forEach(cell => {
+      const set = setForCell.size;
+
+      setForCell.set(cell, set);
+      cellsInSet.set(set, [cell]);
+
+      if (cell.south)
+        neighbors.push([cell, cell.south]);
+
+      if (cell.east)
+        neighbors.push([cell, cell.east]);
+    });
+
+    const canMerge = (left, right) =>
+      setForCell.get(left) != setForCell.get(right);
+
+    const merge = (left, right) => {
+      left.link(right);
+      if (n++ % SKIP == 0)
+        states.push(grid.createSnapshot());
+
+      const winner = setForCell.get(left);
+      const loser = setForCell.get(right);
+      const losers = cellsInSet.get(loser) || [right];
+
+      losers.forEach(cell => {
+        cellsInSet.get(winner).push(cell);
+        setForCell.set(cell, winner);
+      });
+
+      cellsInSet.delete(loser);
+    }
+
+    return { neighbors, canMerge, merge };
+  }
+
+  static display = 'Kruskals';
+  static key = 'kruskals';
+
+  static on(grid, states) {
+    const state = Kruskals.state(grid, states);
+    const neighbors = shuffleArray(state.neighbors);
+
+    while (neighbors.length) {
+      const [left, right] = neighbors.pop();
+      if (state.canMerge(left, right))
+        state.merge(left, right);
+    }
+    states.push(grid.createSnapshot());
+    return grid;
+  }
+}
