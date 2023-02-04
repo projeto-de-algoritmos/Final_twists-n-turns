@@ -49,3 +49,47 @@ class BinaryTree {
     return grid;
   }
 }
+
+class Sidewinder {
+  static key = 'sidewinder';
+  static display = 'Sidewinder';
+  static info = [
+    'O algorimo Sidewinder é parecido com o de Árvore Binária.',
+    'Nesse algoritmo, células adjacentes são agrupadas antes de se conectarem com a fileira ao norte.',
+    'Em decorrência dessa característica, um corredor na parede norte sempre corre por toda a extensão do labirinto.',
+    'O caminho entre duas células também é previsível: sempre corre na direção norte-sul com algumas variações na direção leste-oeste.',
+  ]
+
+  static on(grid, states) {
+    let n = 0;
+    grid.grid.forEach(row => {
+      let run = [];
+
+      row.forEach(cell => {
+        run.push(cell);
+
+        const atEasternBoundary = !cell.east
+        const atNorthernBoundary = !cell.north;
+
+        const shouldClose = atEasternBoundary ||
+          (!atNorthernBoundary && randomBool())
+
+        if (shouldClose) {
+          const member = randomFromArray(run);
+          if (member.north)
+            member.link(member.north);
+
+          run = [];
+        } else {
+          cell.link(cell.east);
+        }
+
+        if (n++ % SKIP == 0)
+          states.push(grid.createSnapshot());
+      });
+    });
+
+    states.push(grid.createSnapshot());
+    return grid;
+  }
+}
