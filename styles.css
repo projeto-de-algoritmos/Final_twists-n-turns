@@ -1,0 +1,57 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+body {
+  font-family: monospace;
+  background: black;
+  color: white;
+  padding: 0.5rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  gap: 0.8rem;
+  padding: 1rem 0;
+}
+
+canvas {
+  background: #111; 
+}
+
+main {
+  display: flex;
+  gap: 1rem;
+}
+
+a {
+  color: #2d8dfa;
+}
