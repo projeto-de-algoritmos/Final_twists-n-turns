@@ -226,6 +226,37 @@ class Kruskals {
       if (state.canMerge(left, right))
         state.merge(left, right);
     }
+
+    states.push(grid.createSnapshot());
+    return grid;
+  }
+}
+
+class SimplifiedPrims {
+  static display = "Prim's Simplificado";
+  static key = 'simplified-prims';
+
+  static on(grid, states) {
+    let active = [grid.randomCell()];
+    let n = 0;
+
+    while (active.length) {
+      const cell = randomFromArray(active);
+      const availableNeighbors = cell.neighbors.filter(n => !n.hasAnyLink);
+
+      if (availableNeighbors.length) {
+        const neighbor = randomFromArray(availableNeighbors);
+
+        cell.link(neighbor);
+        if (n++ % SKIP == 0)
+          states.push(grid.createSnapshot());
+
+        active.push(neighbor);
+      } else {
+        active = active.filter(c => !c.equals(cell));
+      }
+    }
+
     states.push(grid.createSnapshot());
     return grid;
   }
