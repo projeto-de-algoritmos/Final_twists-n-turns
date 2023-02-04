@@ -139,3 +139,32 @@ class HuntAndKill {
     return grid;
   }
 }
+
+class RecursiveBacktracker {
+  static display = 'Recursive Backtracker';
+  static key = 'recursive-backtracker'
+
+  static on(grid, states) {
+    let n = 0;
+
+    const stack = [grid.randomCell()];
+
+    while (stack.length > 0) {
+      const current = stack.at(-1);
+      const neighbors = current.neighbors.filter(n => !n.hasAnyLink);
+
+      if (neighbors.length === 0) {
+        stack.pop();
+      } else {
+        const neighbor = randomFromArray(neighbors);
+        current.link(neighbor);
+        if (n++ % SKIP == 0)
+          states.push(grid.createSnapshot());
+        stack.push(neighbor);
+      }
+    }
+
+    states.push(grid.createSnapshot());
+    return grid;
+  }
+}
