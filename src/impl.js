@@ -1,0 +1,51 @@
+import { randomFromArray, randomBool, shuffleArray, range, randomInt } from './utils.js';
+import { CellMap } from './cell.js';
+
+// This file contains all the maze generation algorithms implemented.
+// 
+// An implementation consists of a class with only static methods and properties.
+// To be a valid implementation, a class needs to contain the following fields:
+// - key: the key that will be used as the value of an HTML input element
+// - display: an human-readable string that will be showed in the interface.
+// - info: a list of strings that explain how the algorithm works.
+//         every string corresponds to a <p> in the rendered DOM.
+
+// Storing state for every `link` call makes algorithms slow,
+// since its a copy of all the cells and links in the current grid.
+// Skipping some entries allow for faster algorithms and animations.
+const SKIP = 10;
+
+class BinaryTree {
+  static key = 'binary-tree';
+  static display = 'Binary Tree';
+  static info = [
+    'O algoritmo de Árvore Binária é, possivelmente, o mais simples para se gerar labirintos.',
+    'Ele consiste em escolher, para cada célula, se existe uma passagem para o norte ou para o leste.',
+    'Esse algoritmo cria um corredor nas paredes ao norte e ao leste, devido à restrição de escolher uma passagem para essas direções.',
+    'Além disso, os caminhos sempre são muito simples, correndo sempre na diagonal norte-leste.',
+  ]
+
+  static on(grid, states) {
+    let n = 0;
+    grid.cells.forEach(cell => {
+      const neighbors = [];
+
+      if (cell.north)
+        neighbors.push(cell.north);
+
+      if (cell.east)
+        neighbors.push(cell.east);
+
+      const neighbor = randomFromArray(neighbors);
+
+      if (neighbor) {
+        cell.link(neighbor);
+        if (n++ % SKIP == 0)
+          states.push(grid.createSnapshot());
+      }
+    });
+
+    states.push(grid.createSnapshot());
+    return grid;
+  }
+}
