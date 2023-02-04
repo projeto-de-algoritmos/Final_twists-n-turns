@@ -261,3 +261,79 @@ class SimplifiedPrims {
     return grid;
   }
 }
+
+class RecursiveDivision {
+  // Helper to implement the actual algorithm.
+  static div(grid, states) {
+    function divideHorizontally(row, col, height, width) {
+      const divideSouthOf = randomInt(0, height - 1);
+      const passageAt = randomInt(0, width);
+
+      range(width).forEach(x => {
+        if (x === passageAt) return;
+
+        const cell = grid.at(row + divideSouthOf, col + x);
+        cell.unlink(cell.south);
+      });
+
+      states.push(grid.createSnapshot());
+
+      divide(row, col, divideSouthOf + 1, width);
+      divide(row + divideSouthOf + 1, col, height - divideSouthOf - 1, width);
+    }
+
+    function divideVertically(row, col, height, width) {
+      const divideEastOf = randomInt(0, width - 1);
+      const passageAt = randomInt(0, height);
+
+      range(height).forEach(y => {
+        if (y === passageAt) return;
+
+        const cell = grid.at(row + y, col + divideEastOf);
+        cell.unlink(cell.east);
+      });
+
+      states.push(grid.createSnapshot());
+
+      divide(row, col, height, divideEastOf + 1);
+      divide(row, col + divideEastOf + 1, height, width - divideEastOf - 1);
+    }
+
+    function divide(row, col, height, width) {
+      if (height <= 1 || width <= 1) return;
+
+      if (height > width)
+        divideHorizontally(row, col, height, width);
+      else
+        divideVertically(row, col, height, width);
+    }
+
+    return divide;
+  }
+
+  static display = 'Divisão Recursiva';
+  static key = 'recursive-division';
+
+  static on(grid, states) {
+    grid.cells.forEach(cell => {
+      cell.neighbors.forEach(n => cell.link(n, false));
+    });
+
+    RecursiveDivision.div(grid, states)(0, 0, grid.rows, grid.cols);
+    return grid;
+  }
+}
+
+// An object contaning every algorithm.
+// This is used to populate the HTML Select element
+// at runtime, so new algorithms don't have to
+// be inserted manually in the DOM.
+export const algorithms = {
+  [BinaryTree.key]: BinaryTree,
+  [Sidewinder.key]: Sidewinder,
+  [HuntAndKill.key]: HuntAndKill,
+  [RecursiveBacktracker.key]: RecursiveBacktracker,
+  [Kruskals.key]: Kruskals,
+  [SimplifiedPrims.key]: SimplifiedPrims,
+  [RecursiveDivision.key]: RecursiveDivision,
+}
