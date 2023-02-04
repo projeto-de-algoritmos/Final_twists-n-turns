@@ -93,3 +93,49 @@ class Sidewinder {
     return grid;
   }
 }
+
+// This algorithm is somewhat slow.
+class HuntAndKill {
+  static display = 'Hunt and Kill';
+  static key = 'hunt-andkill';
+
+  static on(grid, states) {
+    let n = 0;
+    let current = grid.randomCell();
+
+    while (current) {
+      const unvisitedNeighbors = current.neighbors.filter(n => !n.hasAnyLink);
+
+      if (unvisitedNeighbors.length) {
+        const neighbor = randomFromArray(unvisitedNeighbors);
+
+        current.link(neighbor);
+        if (n++ % SKIP == 0)
+          states.push(grid.createSnapshot());
+
+        current = neighbor;
+      } else {
+        current = null;
+
+        for (let cell of shuffleArray(grid.cells)) {
+          const visitedNeighbors = cell.neighbors.filter(n => n.hasAnyLink);
+
+          if (!cell.hasAnyLink && visitedNeighbors.length) {
+            current = cell;
+
+            const neighbor = randomFromArray(visitedNeighbors);
+
+            current.link(neighbor);
+            if (n++ % SKIP == 0)
+              states.push(grid.createSnapshot());
+
+            break;
+          }
+        }
+      }
+    }
+
+    states.push(grid.createSnapshot());
+    return grid;
+  }
+}
