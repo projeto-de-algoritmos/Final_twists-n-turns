@@ -38,17 +38,22 @@ let grid = null;
 let states = [];
 let currentIndex = 0;
 
+const updatePathSize = (path) => {
+  document.getElementById('path-length').innerText = path.length.toString()
+}
 
 // Find path between top right and bottom left.
 $findPath.addEventListener('click', () => {
   const p = findPath(grid.at(0, 0), grid.at(grid.rows - 1, grid.cols - 1));
   ui.renderPath(grid, p);
+  updatePathSize(p);
 })
 
 // Find path between bottom left and top right;
 $otherPath.addEventListener('click', () => {
   const p = findPath(grid.at(grid.rows - 1, 0), grid.at(0, grid.cols - 1));
   ui.renderPath(grid, p);
+  updatePathSize(p);
 })
 
 // (Re)generate grid on input change.
