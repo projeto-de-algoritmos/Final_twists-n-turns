@@ -22,6 +22,9 @@ const $info = document.getElementById('info');
 const $findPath = document.getElementById('find-path');
 const $otherPath = document.getElementById('other-path');
 
+const $pathLength = document.getElementById('path-length');
+const $algoTime = document.getElementById('algo-time');
+
 $canvas.width = WIDTH;
 $canvas.height = HEIGHT;
 
@@ -39,7 +42,7 @@ let states = [];
 let currentIndex = 0;
 
 const updatePathSize = (path) => {
-  document.getElementById('path-length').innerText = path.length.toString()
+  $pathLength.innerText = path.length.toString()
 }
 
 // Find path between top right and bottom left.
@@ -58,6 +61,9 @@ $otherPath.addEventListener('click', () => {
 
 // (Re)generate grid on input change.
 $algoSelect.addEventListener('change', () => {
+  $pathLength.innerText = '';
+  $algoTime.innerText = '';
+
   // When generating, state should be reset.
   states = [];
   currentIndex = 0;
@@ -94,14 +100,17 @@ $algoSelect.addEventListener('change', () => {
 implWorker.onmessage = (e) => {
   currentIndex = 0;
   states = e.data.states;
-  const g = Grid.deserialize(e.data.grid);
-  grid = g;
+  grid = Grid.deserialize(e.data.grid);
+
+  $algoTime.innerText = e.data.executionTime + ' ms';
 }
 
 // Clears 
 $clear.addEventListener('click', () => {
   grid = null;
   ui.clear()
+  $pathLength.innerText = '';
+  $algoTime.innerText = '';
 });
 
 // Main animation loop.
