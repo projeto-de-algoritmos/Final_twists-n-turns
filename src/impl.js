@@ -98,6 +98,7 @@ class Sidewinder {
 class HuntAndKill {
   static display = 'Hunt and Kill';
   static key = 'hunt-andkill';
+  static info = [];
 
   static on(grid, states) {
     let n = 0;
@@ -143,6 +144,7 @@ class HuntAndKill {
 class RecursiveBacktracker {
   static display = 'Recursive Backtracker';
   static key = 'recursive-backtracker'
+  static info = [];
 
   static on(grid, states) {
     let n = 0;
@@ -216,6 +218,7 @@ class Kruskals {
 
   static display = 'Kruskals';
   static key = 'kruskals';
+  static info = [];
 
   static on(grid, states) {
     const state = Kruskals.state(grid, states);
@@ -235,6 +238,7 @@ class Kruskals {
 class SimplifiedPrims {
   static display = "Prim's Simplificado";
   static key = 'simplified-prims';
+  static info = [];
 
   static on(grid, states) {
     let active = [grid.randomCell()];
@@ -265,6 +269,8 @@ class SimplifiedPrims {
 class RecursiveDivision {
   // Helper to implement the actual algorithm.
   static div(grid, states) {
+    let n = 0;
+
     function divideHorizontally(row, col, height, width) {
       const divideSouthOf = randomInt(0, height - 1);
       const passageAt = randomInt(0, width);
@@ -276,7 +282,8 @@ class RecursiveDivision {
         cell.unlink(cell.south);
       });
 
-      states.push(grid.createSnapshot());
+      if (n++ % SKIP == 0)
+        states.push(grid.createSnapshot());
 
       divide(row, col, divideSouthOf + 1, width);
       divide(row + divideSouthOf + 1, col, height - divideSouthOf - 1, width);
@@ -293,7 +300,8 @@ class RecursiveDivision {
         cell.unlink(cell.east);
       });
 
-      states.push(grid.createSnapshot());
+      if (n++ % SKIP == 0)
+        states.push(grid.createSnapshot());
 
       divide(row, col, height, divideEastOf + 1);
       divide(row, col + divideEastOf + 1, height, width - divideEastOf - 1);
@@ -313,6 +321,7 @@ class RecursiveDivision {
 
   static display = 'Divisão Recursiva';
   static key = 'recursive-division';
+  static info = [];
 
   static on(grid, states) {
     grid.cells.forEach(cell => {

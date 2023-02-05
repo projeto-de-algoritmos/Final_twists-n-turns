@@ -31,6 +31,7 @@ Object.entries(algorithms).forEach(([name, impl]) => {
 });
 
 const ui = new UI($canvas);
+const implWorker = new Worker('src/worker.js', { type: 'module' });
 
 // TODO: Make these not global. Maybe inject them into all places that uses them.
 let grid = null;
@@ -53,7 +54,6 @@ $otherPath.addEventListener('click', () => {
 // (Re)generate grid on input change.
 $algoSelect.addEventListener('change', () => {
   // When generating, state should be reset.
-  grid = new Grid(ROWS, COLS, CELLSIZE);
   states = [];
   currentIndex = 0;
 
@@ -62,9 +62,36 @@ $algoSelect.addEventListener('change', () => {
   // Add algorithm info to DOM.
   $info.innerHTML = impl.info.map(i => `<p>${i}</p>`).join('\n');
 
-  // FIXME: move to webworker so the main thread is not blocked.
-  impl.on(grid, states);
+  // Clearing previous maze
+  ui.clear();
+
+  // Starting algorithm in a webworker.
+  // The algorithms can take multiple seconds, so doing this in a separate thread
+  // unblocks the UI.
+  //
+  // Even though most of the work is done outside of the main thread, the animation
+  // data consists of a large quantity of grids at different points in time.
+  // This takes a while to be copied later, so the main thread is still blocked at
+  // that time.
+  //
+  // A better solution could be implemented if the animation task was streaming instead,
+  // buffering frames and disposing of them when they are rendered into the canvas.
+  // This is hard to do, though.
+  //
+  // Another possible solution would be to improve the rendering algorithm to only
+  // take the diff between two states and render only the changes. This would make
+  // the animation data smaller, since most cells don't change at all from one frame
+  // to another.
+  implWorker.postMessage({ algo: $algoSelect.value, ROWS, COLS, CELLSIZE });
 });
+
+// Receives the animation data and grid from the webworker.
+implWorker.onmessage = (e) => {
+  currentIndex = 0;
+  states = e.data.states;
+  const g = Grid.deserialize(e.data.grid);
+  grid = g;
+}
 
 // Clears 
 $clear.addEventListener('click', () => {

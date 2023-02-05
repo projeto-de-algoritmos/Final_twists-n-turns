@@ -79,4 +79,35 @@ export class Grid {
       south: cell.hasLink(cell.south),
     }));
   }
+
+  serialize() {
+    const cellData = this.cells.map(
+      cell => ({
+        row: cell.row,
+        col: cell.col,
+        links: Array.from(cell.links.keys()).map(x => [x.row, x.col]),
+      })
+    )
+
+    return {
+      rows: this.rows,
+      cols: this.cols,
+      cellSize: this.cellSize,
+      cellData,
+    }
+  }
+
+  static deserialize({ rows, cols, cellSize, cellData }) {
+    const grid = new Grid(rows, cols, cellSize);
+
+    cellData.forEach(data => {
+      const cell = grid.at(data.row, data.col);
+
+      data.links.forEach(([row, col]) => {
+        cell.link(grid.at(row, col));
+      })
+    })
+
+    return grid;
+  }
 }
