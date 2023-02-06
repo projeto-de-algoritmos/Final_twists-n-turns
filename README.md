@@ -64,6 +64,7 @@ E acesse `localhost:9000` no Chrome/Edge/Brave/etc.
 
 Como o projeto utiliza web-workers, somente navegadores baseados no Chromium são suportados.
 
+O projeto também pode ser acessado em [https://twists-n-turns.puida.xyz](https://twists-n-turns.puida.xyz)
 
 ## Uso 
 
