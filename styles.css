@@ -30,6 +30,7 @@ select {
 
 body {
   font-family: monospace;
+  font-size: 1.1em;
   background: black;
   color: white;
   padding: 0.5rem;

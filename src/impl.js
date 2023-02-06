@@ -98,7 +98,12 @@ class Sidewinder {
 class HuntAndKill {
   static display = 'Hunt and Kill';
   static key = 'hunt-andkill';
-  static info = [];
+  static info = [
+    'Começando em uma posição arbitrária, o algoritmo seleciona células adjacentes que não foram visitadas ainda.',
+    'Quando não é possível selecionar uma célula, escolhe uma outra posição adjacente ao caminho já visitado. O algoritmo conecta essas duas células e repete o processo, até que todas as células sejam visitadas',
+    'Esse algoritmo produz labirintos com caminhos longos e tortuosos, com poucos dead-ends.',
+    'É semelhante ao <b>Recursive Backtracker</b>, mas potencialmente mais devagar já que pode escanear uma célula várias vezes. No entanto, precisa de menos memória.',
+  ];
 
   static on(grid, states) {
     let n = 0;
@@ -144,7 +149,12 @@ class HuntAndKill {
 class RecursiveBacktracker {
   static display = 'Recursive Backtracker';
   static key = 'recursive-backtracker'
-  static info = [];
+  static info = [
+    'Começando em uma posição arbitrária, o algoritmo seleciona células adjacentes que não foram visitadas ainda.',
+    'Quando isso não é possível, retrocede até a célula visitada mais recentemente que ainda tem vizinhos não-visitados e recomeça o processo.',
+    'O algoritmo finaliza quando retrocede até a célula inicial.',
+    'Produz caminhos longos e tortuosos, com poucos dead-ends. Mais rápido que o <b>Hunt and Kill</b>, mas gasta mais memória por ter que guardar o caminho percorrido.',
+  ];
 
   static on(grid, states) {
     let n = 0;
@@ -218,7 +228,12 @@ class Kruskals {
 
   static display = 'Kruskals';
   static key = 'kruskals';
-  static info = [];
+  static info = [
+    'Começa designando cada célula a um conjunto distinto. Depois, conetcta duas células adjacentes, mas somente se essas células não estiverem no mesmo conjunto.',
+    'Após conectar as células, juntas os conjuntos das duas células.',
+    'Executa até um restar único conjunto.',
+    'Produz labirintos regulares e sem parcialidade.'
+  ];
 
   static on(grid, states) {
     const state = Kruskals.state(grid, states);
@@ -238,7 +253,12 @@ class Kruskals {
 class SimplifiedPrims {
   static display = "Prim's Simplificado";
   static key = 'simplified-prims';
-  static info = [];
+  static info = [
+    'Inicializa um conjunto em uma célula arbitrária. Aleatoriamente seleciona uma célula do conjunto. Caso essa célua não possua vizinhos não-visitados, remove-a do conjunto. Caso contrário, seleciona um vizinho não-visitado, conecta as duas células e adiciona o vizinho ao conjunto.',
+    'Após conectar, adiciona o vizinho ao conjunto',
+    'Esse processo é repetido até que o conjunto esteja vazio.',
+    'Produz labirintos com característica radial partindo do ponto de início. Tendem a ter mais dead-ends e caminhos curtos do que os outros labirintos.'
+  ];
 
   static on(grid, states) {
     let active = [grid.randomCell()];
@@ -321,7 +341,13 @@ class RecursiveDivision {
 
   static display = 'Divisão Recursiva';
   static key = 'recursive-division';
-  static info = [];
+  static info = [
+    'Diferente dos outros algoritmos, começa com um tabuleiro vazio: sem nenhuma parede.',
+    'Recursivamente adiciona uma parede no tabuleiro, que divide o espaço em dois, com uma passagem em algum lugar.',
+    'Repete o processo nos dois lados da parede até que não exista nenhuma área possível de ser dividida.',
+    'Produz labirintos com uma textura quadrada.',
+    'Geralmente são fáceis de resolver, já que é possível identificar as áreas de interesse onde o caminho deve passar.',
+  ];
 
   static on(grid, states) {
     grid.cells.forEach(cell => {
