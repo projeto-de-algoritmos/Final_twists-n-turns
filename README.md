@@ -42,7 +42,11 @@ selecionado é executado em um _Web Worker_.
 
 ## Screenshots
 
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+![image 1](/media/image-1.png)
+![image 1](/media/image-2.png)
+![image 1](/media/image-3.png)
+
+O vídeo pode ser encontrado [aqui](/media/final.mp4).
 
 ## Instalação 
 
